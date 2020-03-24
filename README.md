@@ -1,4 +1,6 @@
-$ ./test-docker-apis 
+It looks that registries cannot be unified.
+```
+$ ./test-docker-apis
 getToken raw http request took 164ns
 Read token http resp took 323ns
 Read token http resp took 323ns
@@ -11,3 +13,4 @@ getDigest raw http request took 118ns
 
 [Error] Could not get a client 3: 401
 
+```
