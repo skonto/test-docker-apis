@@ -1,3 +1,10 @@
+Make sure you install the following libs:
+```
+sudo apt-get install libdevmapper-dev
+sudo apt-get install btrfs-tools
+sudo apt-get install libgpgme-dev
+```
+
 It looks that registries cannot be unified.
 ```
 $ ./test-docker-apis
