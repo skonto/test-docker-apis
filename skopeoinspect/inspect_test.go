@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Test_inspectdockerhub(t *testing.T) {
+func Test_inspect(t *testing.T) {
 
 	var ins InspectOptions
 
