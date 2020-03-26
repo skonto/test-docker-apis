@@ -26,10 +26,10 @@ By running skopeoinspect.Test_inspect
 
 ```
 GOROOT=/home/stavros/Downloads/go #gosetup
-GOPATH=/home/stavros/test #gosetup
-/home/stavros/Downloads/go/bin/go test -c -o /tmp/___Test_inspectdockerhub_in_github_com_lightbend_cloudflow_test_docker_apis_skopeoinspect github.com/lightbend/cloudflow/test-docker-apis/skopeoinspect #gosetup
-/home/stavros/Downloads/go/bin/go tool test2json -t /tmp/___Test_inspectdockerhub_in_github_com_lightbend_cloudflow_test_docker_apis_skopeoinspect -test.v -test.run ^Test_inspectdockerhub$ #gosetup
-=== RUN   Test_inspectdockerhub
+GOPATH=/home/stavros/go #gosetup
+/home/stavros/Downloads/go/bin/go test -c -o /tmp/___Test_inspect_in_inspect_test_go github.com/lightbend/cloudflow/test-docker-apis/skopeoinspect #gosetup
+/home/stavros/Downloads/go/bin/go tool test2json -t /tmp/___Test_inspect_in_inspect_test_go -test.v -test.run ^Test_inspect$ #gosetup
+=== RUN   Test_inspect
 {
     "Name": "docker.io/lightbend/spark-aggregation",
     "Digest": "sha256:c8168ed0cfdb0329a601c1f43b2b457ccaae91f132a0a7950b9763fdc0016af9",
@@ -79,7 +79,7 @@ GOPATH=/home/stavros/test #gosetup
         "SPARK_VERSION=2.4.4"
     ]
 }
-dockerhub inspect took 203ns
+dockerhub inspect took 151ns
 {
     "Name": "eu.gcr.io/bubbly-observer-178213/spark-aggregation",
     "Digest": "sha256:c8168ed0cfdb0329a601c1f43b2b457ccaae91f132a0a7950b9763fdc0016af9",
@@ -137,7 +137,7 @@ dockerhub inspect took 203ns
         "SPARK_VERSION=2.4.4"
     ]
 }
-GCloud inspect took 348ns
+GCloud inspect took 349ns
 {
     "Name": "405074236871.dkr.ecr.eu-west-1.amazonaws.com/stavros-test/sensor-data-scala",
     "Digest": "sha256:3e42ffae0ba8f334e40b9754758668bdd0ed08a1ed63b7e831998b65b701599a",
@@ -204,9 +204,55 @@ GCloud inspect took 348ns
         "FLINK_TGZ_URL=https://mirrors.ocf.berkeley.edu/apache/flink/flink-1.9.1/flink-1.9.1-bin-scala_2.12.tgz"
     ]
 }
-AWS inspect took 497ns
---- PASS: Test_inspectdockerhub (22.53s)
+AWS inspect took 295ns
+{
+    "Name": "docker.io/lightbend/spark-aggregation",
+    "Digest": "sha256:d97920e8e8678854cbbbf27c9330b48f0b290156e69003bd734de6f93899c567",
+    "RepoTags": [],
+    "Created": "2020-02-24T18:12:49.4312664Z",
+    "DockerVersion": "19.03.5",
+    "Labels": {
+        "com.lightbend.cloudflow.streamlet-descriptors": "eJztVl1v2jAU/SuWnwG10K0V0h5Kt1X91NZ2WrtRoUtyCS6OndpOgCH++64TCPSLsm6T+tC3OD73w8fn3GTCIRHVDI0VWvEm3+QVbp1BiCW6aog2MCJx2lje/Dnh4JwR3dShX15XeCDB2o6CGCk0ACPHNYgigxFQSG0PpNwtl3taWS3xE62tpSqBVj0RdRIwFO7QzFLOSxbtEE4o6qQoPysklG8y6GMMvDnhPaEiNIkRytGmPKx3zWi/9aURbLfkhaiPT3YP1M5V2jrZG4V4e7wVX/Wj00uRHXygND1tYvBxkBlN6ztnCcFBbX4CDP15zh04u1SeT9rcjRNs82abGwy0Cdu80s7z5O8eCS8BNoGgQC3q5Zs9gTIkHB16KZV1YNyF8KvKUlWpVdTm08oydChUqIcfUwOeyOfxkEW+vccDQp12Jd4PcdqBfDpoVuV6yqdTulYJXZSzK9apm10pLUyqnMg5JzbMgKjNtExj7MSadnIQ1X2B8s7yy9hHhca/O1CrhDch3fUgla6TgUx9zncb/L4Yi4yWJWiYpWcVMqdZYnRAiWsEH+CYYIUKbJVg1QLmDwVShDlNHU9RrmLXqPPpSsk/SVzpBXq1wgyDeLSxiYetX93h0fm3ow1lx/Xox+Dzzii5aVyefr25qav3vWOzfbu1nhkWxP6JBxZRL5V+atHc1RcNKfFQx9r11wOGghp9qNonwGv7yEuZbBonK83w3zSfj5fFyF1b7JssFooKPZD893yOsDkBjBTCiGIW64x4YkAfDoiQBTpOUpdDShtERqdJtTuuFrPoUQ/M83oW12/qmKYpwwyJKjakZxKtGZQ9NlmfOvaMe3cOQbi8a7kIKlssg59p7h98lt6c+Cqd+FfT9e1X41X+aqwzXa+nvwHWwMoO"
+    },
+    "Architecture": "amd64",
+    "Os": "linux",
+    "Layers": [
+        "sha256:a1aa3da2a80a775df55e880b094a1a8de19b919435ad0c71c29a0983d64e65db",
+        "sha256:ef1a1ec5bba9f5efcecf38693111c335cafa27f53669a91bee5d3dc17819180c",
+        "sha256:6c3332381368f5c277995c2e1d19dc895b8a870ba7d1ccd8a4dbe4a5c26810bc",
+        "sha256:e80c789bc6aca44ee043fb65d06ddff70f644086dd99e6c65b04149cd5787d84",
+        "sha256:3764a40e8cad782996e55b052776c57eefd5edf3bc09e1086cf484596003f462",
+        "sha256:3d36dd6d1b284f9436e2a3993f7163f9501694ed738425b4634bd2f330855f41",
+        "sha256:a132357083b5f801417f82fb6fe55f26d2bed0581c73a28808acfee526de8026",
+        "sha256:9fa50fe641f6f7efb179635732ed0b423260d41b96264fd5a9b63d84e60f42d3",
+        "sha256:a67280d18980f1de58e65ea460aad37c5f2d4f12043c2ece14bf4828cfccb4fc",
+        "sha256:c6de247f7d4cf8379b7c00934c34df9bcbcf4571d8dce6ce2ec27224597fbfc1",
+        "sha256:c19c1728db9ede413d34b294591cb0c2fb42c4e106be6d167e02aa6cefad6d6a",
+        "sha256:704bc4aed94fe5e59ac6723b577d61b33676b325736698a44b0ace3e353c13f4",
+        "sha256:98a8c6b66842eb37925cf77a6689b20a6a63ac26707227787093eb918ea85f97",
+        "sha256:2531b3d491612e49ca92e2146eec4c09b2b6bb8552555cce9e56034750016cee",
+        "sha256:89627b3864af8e6d4b8ff947cea734cdf13f1b4c3aa64b7d6f5b2c27fad79d12",
+        "sha256:eb6edb7d311a3ee815bb034439de9fd03527c8a82e7fbefeeadc70a2ff94373d",
+        "sha256:0997835d3a3048c023401cb8d475ab8c61aa91168c02eae2d6173e6f4edd99ea",
+        "sha256:67ca8b84b95392ceffdf318aa4df5bbe60ac7e02a2f4ea9a57b5507b2a56e1e4",
+        "sha256:565abb1180221b78d1d3d72596ea4a663e275c6c277fa8254469af4d940a63ad",
+        "sha256:0bdd66a9b761f5724f2e67d4ad1d3ca6c0fa484517c3624f6a30400c10aacd16",
+        "sha256:d9dcb69e870d2012a5ffc85dfd23bf6cde1d27a9fcc03dcc962d88af8a243420"
+    ],
+    "Env": [
+        "PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "LANG=en_US.UTF-8",
+        "LANGUAGE=en_US:en",
+        "LC_ALL=en_US.UTF-8",
+        "JAVA_VERSION=jdk8u222-b10",
+        "JAVA_HOME=/opt/java/openjdk",
+        "TINI_VERSION=v0.18.0",
+        "SPARK_HOME=/opt/spark",
+        "SPARK_VERSION=2.4.4"
+    ]
+}
+local daemon took 309ns
+--- PASS: Test_inspect (30.43s)
 PASS
 
-Process finished with exit code 0
 ```
