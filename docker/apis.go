@@ -63,7 +63,7 @@ func PrintMetadata() {
 
 	var gkeAuthToken = GetGKERegistryToken()
 
-	var gkeToken = fmt.Sprintf("{\"username\": \"oauth2accesstoken\", \"password\": \"%s\", \"email\": \"stavros@lightbend.gr\", \"serveraddress\": \"ip\"}", gkeAuthToken)
+	var gkeToken = fmt.Sprintf("{\"username\": \"_dcgcloud_token\", \"password\": \"%s\", \"email\": \"stavros@lightbend.gr\", \"serveraddress\": \"ip\"}", gkeAuthToken)
 
 	// https://docs.docker.com/engine/api/v1.39/#section/Authentication
 	gkeToken = base64.StdEncoding.EncodeToString([]byte(gkeToken))
@@ -134,6 +134,7 @@ func GetDigest(client http.Client, image string, tag string, token string, regis
 		req.Header.Add("X-Registry-Auth", token)
 	}
 	req.Header.Add("Accept", "application/vnd.docker.distribution.manifest.v2+json")
+	req.Header.Add("Docker-Distribution-API-Version", "registry/2.0")
 	elapsed := time.Since(time.Now())
 	resp, err := client.Do(req)
 	fmt.Printf("getDigest raw http request took %s\n", elapsed)

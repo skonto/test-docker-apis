@@ -113,8 +113,8 @@ type SharedImageOptions struct {
 // the same across subcommands, but may be different for each image
 // (e.g. may differ between the source and destination of a copy)
 type DockerImageOptions struct {
-	global         *GlobalOptions      // May be shared across several ImageOptions instances.
-	shared         *SharedImageOptions // May be shared across several ImageOptions instances.
+	Global         *GlobalOptions      // May be shared across several ImageOptions instances.
+	Shared         *SharedImageOptions // May be shared across several ImageOptions instances.
 	authFilePath   optionalString      // Path to a */containers/auth.json (prefixed version to override shared image option).
 	credsOption    optionalString      // username[:password] for accessing a registry
 	dockerCertPath string              // A directory using Docker-like *.{crt,cert,key} files for connecting to a registry or a daemon
@@ -134,16 +134,16 @@ type ImageOptions struct {
 // It is guaranteed to return a fresh instance, so it is safe to make additional updates to it.
 func (opts *ImageOptions) newSystemContext() (*types.SystemContext, error) {
 	ctx := &types.SystemContext{
-		RegistriesDirPath:        opts.global.registriesDirPath,
-		ArchitectureChoice:       opts.global.overrideArch,
-		OSChoice:                 opts.global.overrideOS,
-		VariantChoice:            opts.global.overrideVariant,
+		RegistriesDirPath:        opts.Global.registriesDirPath,
+		ArchitectureChoice:       opts.Global.overrideArch,
+		OSChoice:                 opts.Global.overrideOS,
+		VariantChoice:            opts.Global.overrideVariant,
 		DockerCertPath:           opts.dockerCertPath,
 		OCISharedBlobDirPath:     opts.sharedBlobDir,
-		AuthFilePath:             opts.shared.authFilePath,
+		AuthFilePath:             opts.Shared.authFilePath,
 		DockerDaemonHost:         opts.dockerDaemonHost,
 		DockerDaemonCertPath:     opts.dockerCertPath,
-		SystemRegistriesConfPath: opts.global.registriesConfPath,
+		SystemRegistriesConfPath: opts.Global.registriesConfPath,
 	}
 	if opts.DockerImageOptions.authFilePath.present {
 		ctx.AuthFilePath = opts.DockerImageOptions.authFilePath.value
@@ -152,8 +152,8 @@ func (opts *ImageOptions) newSystemContext() (*types.SystemContext, error) {
 		ctx.DockerDaemonInsecureSkipTLSVerify = !opts.tlsVerify.value
 	}
 	// DEPRECATED: We support this for backward compatibility, but override it if a per-image flag is provided.
-	if opts.global.tlsVerify.present {
-		ctx.DockerInsecureSkipTLSVerify = types.NewOptionalBool(!opts.global.tlsVerify.value)
+	if opts.Global.tlsVerify.present {
+		ctx.DockerInsecureSkipTLSVerify = types.NewOptionalBool(!opts.Global.tlsVerify.value)
 	}
 	if opts.tlsVerify.present {
 		ctx.DockerInsecureSkipTLSVerify = types.NewOptionalBool(!opts.tlsVerify.value)

@@ -45,8 +45,8 @@ type GlobalOptions struct {
 }
 
 type InspectOptions struct {
-	global *GlobalOptions
-	image  *ImageOptions
+	Global *GlobalOptions
+	Image  *ImageOptions
 	raw    bool // Output the raw manifest instead of parsing information about the image
 	config bool // Output the raw config blob instead of parsing information about the image
 }
@@ -79,8 +79,8 @@ func (opts *GlobalOptions) commandTimeoutContext() (context.Context, context.Can
 	return ctx, cancel
 }
 
-func (opts *InspectOptions) run(args []string, stdout io.Writer) (retErr error) {
-	ctx, cancel := opts.global.commandTimeoutContext()
+func (opts *InspectOptions) Run(args []string, stdout io.Writer) (retErr error) {
+	ctx, cancel := opts.Global.commandTimeoutContext()
 	defer cancel()
 
 	if len(args) != 1 {
@@ -92,12 +92,12 @@ func (opts *InspectOptions) run(args []string, stdout io.Writer) (retErr error) 
 	//	return err
 	//}
 
-	sys, err := opts.image.newSystemContext()
+	sys, err := opts.Image.newSystemContext()
 	if err != nil {
 		return err
 	}
 
-	src, err := parseImageSource(ctx, opts.image, imageName)
+	src, err := parseImageSource(ctx, opts.Image, imageName)
 	if err != nil {
 		return fmt.Errorf("Error parsing image name %q: %v", imageName, err)
 	}
@@ -173,7 +173,7 @@ func (opts *InspectOptions) run(args []string, stdout io.Writer) (retErr error) 
 		outputData.Name = dockerRef.Name()
 	}
 	if img.Reference().Transport() == docker.Transport {
-		sys, err := opts.image.newSystemContext()
+		sys, err := opts.Image.newSystemContext()
 		if err != nil {
 			return err
 		}
