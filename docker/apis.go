@@ -36,10 +36,11 @@ func PrintMetadata() {
 
 	// test dockerhub
 	image := "lightbend/spark-aggregation"
+	elapsedTotal := time.Now()
 	var token = GetToken(*httpClient, image)
 	var digest = GetDigest(*httpClient, image, "134-d0ec286-dirty", token, dockerRegistry, true)
 	raw := GetImageConfiguration(*httpClient, image, digest, token)
-
+	fmt.Printf("token + digest + configuration took %s\n", time.Since(elapsedTotal))
 
 	compressed := base64.NewDecoder(base64.StdEncoding, bytes.NewReader([]byte(raw)))
 	reader, err := zlib.NewReader(compressed)
@@ -88,12 +89,12 @@ func GetGKERegistryToken() string {
 
 // GetToken gets a token to be used with dockerhub.io
 func GetToken(client http.Client, image string) string {
-	elapsedTotal := time.Since(time.Now())
+	elapsedTotal := time.Now()
 	req, err := http.NewRequest("GET", fmt.Sprintf("https://auth.docker.io/token?scope=repository:%s:pull&service=registry.docker.io", image), nil)
 
-	elapsed := time.Since(time.Now())
+	start := time.Now()
 	resp, err := client.Do(req)
-	fmt.Printf("getToken raw http request took %s\n", elapsed)
+	fmt.Printf("getToken raw http request took %s\n",time.Since(start))
 	if err != nil {
 		LogAndExit("Could not get a client 2: %s", err.Error())
 	}
@@ -101,25 +102,25 @@ func GetToken(client http.Client, image string) string {
 	if resp == nil || resp.StatusCode != 200 {
 		LogAndExit("Could not get a client 3: %d", resp.StatusCode)
 	}
-	elapsed = time.Since(time.Now())
+	start = time.Now()
 	body, err := ioutil.ReadAll(resp.Body)
-	fmt.Printf("Read token http resp took %s\n", elapsed)
+	fmt.Printf("Read token http resp took %s\n", time.Since(start))
 	if err != nil {
 		LogAndExit("Could not get a client 4: %s", err.Error())
 	}
 	contents := string(body)
-	fmt.Printf("Read token http resp took %s\n", elapsed)
+	fmt.Printf("Read token http resp took %s\n", time.Since(start))
 	var tk Token
 
-	elapsed = time.Since(time.Now())
+	start = time.Now()
 	err = json.Unmarshal([]byte(contents), &tk)
-	fmt.Printf("unmarshal token took %s\n", elapsed)
+	fmt.Printf("unmarshal token took %s\n", time.Since(start))
 
 	if err!= nil {
 		LogAndExit("Could not get a client 4: %s", err.Error())
 	}
 
-	fmt.Printf(" getToken function took %s\n", elapsedTotal)
+	fmt.Printf(" getToken function took %s\n", time.Since(elapsedTotal))
 	return tk.Token
 }
 
@@ -135,9 +136,9 @@ func GetDigest(client http.Client, image string, tag string, token string, regis
 	}
 	req.Header.Add("Accept", "application/vnd.docker.distribution.manifest.v2+json")
 	req.Header.Add("Docker-Distribution-API-Version", "registry/2.0")
-	elapsed := time.Since(time.Now())
+	start := time.Now()
 	resp, err := client.Do(req)
-	fmt.Printf("getDigest raw http request took %s\n", elapsed)
+	fmt.Printf("getDigest raw http request took %s\n", time.Since(start ))
 	if err != nil {
 		LogAndExit("Could not get a client 2: %s", err.Error())
 	}
@@ -162,14 +163,17 @@ func GetDigest(client http.Client, image string, tag string, token string, regis
 
 // GetImageConfiguration gets image configuration based on the image name and digest.
 func GetImageConfiguration(client http.Client, image string, digest string, token string) string {
+
 	req, err := http.NewRequest("GET", fmt.Sprintf("https://registry-1.docker.io/v2/%s/blobs/%s",image, digest), nil)
+
 	var tk = "Bearer " + token
 	req.Header.Add("Authorization", tk)
 	req.Header.Add("Accept", "application/vnd.docker.distribution.manifest.v2+json")
 
-	elapsed := time.Since(time.Now())
+	start := time.Now()
 	resp, err := client.Do(req)
-	fmt.Printf("getImageConfiguration raw http request took %s\n", elapsed)
+	fmt.Printf("Raw inspect request call took %s\n", time.Since(start))
+
 
 	if err != nil {
 		LogAndExit("Could not get a client 2: %s", err.Error())

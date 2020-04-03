@@ -7,16 +7,16 @@ sudo apt-get install libgpgme-dev
 
 It looks that registries cannot be unified.
 ```
-$ ./test-docker-apis
-getToken raw http request took 164ns
-Read token http resp took 323ns
-Read token http resp took 323ns
-unmarshal token took 186ns
- getToken function took 324ns
-getDigest raw http request took 174ns
-getImageConfiguration raw http request took 246ns
-{[{[] carly.aggregator.CallAggregatorConsoleEgress [] [] [{in {lJ2brxGBP3c7BlTi2yMAIn8YuBMCxdeqL4mYhgNXivI= {"type":"record","name":"AggregatedCallStats","namespace":"carly.data","fields":[{"name":"startTime","type":"long"},{"name":"windowDuration","type":"long"},{"name":"avgCallDuration","type":"double"},{"name":"totalCallDuration","type":"long"}]} carly.data.AggregatedCallStats avro}}] [] [] spark } {[] carly.aggregator.CallRecordGeneratorIngress [{records-per-second Records per second to process. int32 <nil> 0xc0002dcf00}] [] [] [] [{out {kmx01eJBzbwKSUK0nsy2gZkF8xpj3XNQjj2n6fLr7q4= {"type":"record","name":"CallRecord","namespace":"carly.data","fields":[{"name":"user","type":"string"},{"name":"other","type":"string"},{"name":"direction","type":"string"},{"name":"duration","type":"long"},{"name":"timestamp","type":"long"}]} carly.data.CallRecord avro}}] spark } {[] carly.aggregator.CallStatsAggregator [{group-by-window Window duration for the moving average computation duration <nil> 0xc0002dcf10} {watermark Late events watermark duration: how long to wait for late events duration <nil> 0xc0002dcf20}] [] [{in {kmx01eJBzbwKSUK0nsy2gZkF8xpj3XNQjj2n6fLr7q4= {"type":"record","name":"CallRecord","namespace":"carly.data","fields":[{"name":"user","type":"string"},{"name":"other","type":"string"},{"name":"direction","type":"string"},{"name":"duration","type":"long"},{"name":"timestamp","type":"long"}]} carly.data.CallRecord avro}}] [] [{out {lJ2brxGBP3c7BlTi2yMAIn8YuBMCxdeqL4mYhgNXivI= {"type":"record","name":"AggregatedCallStats","namespace":"carly.data","fields":[{"name":"startTime","type":"long"},{"name":"windowDuration","type":"long"},{"name":"avgCallDuration","type":"double"},{"name":"totalCallDuration","type":"long"}]} carly.data.AggregatedCallStats avro}}] spark }] 1}
-getDigest raw http request took 118ns
+getToken raw http request took 1.35445601s
+Read token http resp took 102.563µs
+Read token http resp took 122.029µs
+unmarshal token took 254.756µs
+ getToken function took 1.354911473s
+getDigest raw http request took 1.2243096s
+Raw inspect request call took 571.027553ms
+token + digest + configuration took 3.166432142s
+{[{[] carly.aggregator.CallAggregatorConsoleEgress [] [] [{in {lJ2brxGBP3c7BlTi2yMAIn8YuBMCxdeqL4mYhgNXivI= {"type":"record","name":"AggregatedCallStats","namespace":"carly.data","fields":[{"name":"startTime","type":"long"},{"name":"windowDuration","type":"long"},{"name":"avgCallDuration","type":"double"},{"name":"totalCallDuration","type":"long"}]} carly.data.AggregatedCallStats avro}}] [] [] spark } {[] carly.aggregator.CallRecordGeneratorIngress [{records-per-second Records per second to process. int32 <nil> 0xc000282d20}] [] [] [] [{out {kmx01eJBzbwKSUK0nsy2gZkF8xpj3XNQjj2n6fLr7q4= {"type":"record","name":"CallRecord","namespace":"carly.data","fields":[{"name":"user","type":"string"},{"name":"other","type":"string"},{"name":"direction","type":"string"},{"name":"duration","type":"long"},{"name":"timestamp","type":"long"}]} carly.data.CallRecord avro}}] spark } {[] carly.aggregator.CallStatsAggregator [{group-by-window Window duration for the moving average computation duration <nil> 0xc000282d30} {watermark Late events watermark duration: how long to wait for late events duration <nil> 0xc000282d40}] [] [{in {kmx01eJBzbwKSUK0nsy2gZkF8xpj3XNQjj2n6fLr7q4= {"type":"record","name":"CallRecord","namespace":"carly.data","fields":[{"name":"user","type":"string"},{"name":"other","type":"string"},{"name":"direction","type":"string"},{"name":"duration","type":"long"},{"name":"timestamp","type":"long"}]} carly.data.CallRecord avro}}] [] [{out {lJ2brxGBP3c7BlTi2yMAIn8YuBMCxdeqL4mYhgNXivI= {"type":"record","name":"AggregatedCallStats","namespace":"carly.data","fields":[{"name":"startTime","type":"long"},{"name":"windowDuration","type":"long"},{"name":"avgCallDuration","type":"double"},{"name":"totalCallDuration","type":"long"}]} carly.data.AggregatedCallStats avro}}] spark }] 1}
+getDigest raw http request took 510.567976ms
 
 [Error] Could not get a client 3: 401
 
@@ -25,7 +25,11 @@ getDigest raw http request took 118ns
 By running skopeoinspect.Test_inspect
 
 ```
-=== RUN   Test_inspect
+newSystemContext() took 3.101µs
+parseImageSource() took 3.533902813s
+MANIFEST took 874ns
+INSPECT took 1.350039692s
+GetRepositoryTags() took 3.458903047s
 {
     "Name": "docker.io/lightbend/spark-aggregation",
     "Digest": "sha256:c8168ed0cfdb0329a601c1f43b2b457ccaae91f132a0a7950b9763fdc0016af9",
@@ -75,7 +79,13 @@ By running skopeoinspect.Test_inspect
         "SPARK_VERSION=2.4.4"
     ]
 }
-dockerhub inspect took 15.788238015s
+unmarshal took 314.976µs
+dockerhub inspect took 8.344820024s
+newSystemContext() took 1.804µs
+parseImageSource() took 2.154147752s
+MANIFEST took 1.292µs
+INSPECT took 1.202223843s
+GetRepositoryTags() took 2.991732607s
 {
     "Name": "eu.gcr.io/bubbly-observer-178213/spark-aggregation",
     "Digest": "sha256:c8168ed0cfdb0329a601c1f43b2b457ccaae91f132a0a7950b9763fdc0016af9",
@@ -138,7 +148,13 @@ dockerhub inspect took 15.788238015s
         "SPARK_VERSION=2.4.4"
     ]
 }
-GCloud inspect took 4.6376393s
+unmarshal took 308.494µs
+GCloud inspect took 6.349236379s
+newSystemContext() took 3.097µs
+parseImageSource() took 1.308104249s
+MANIFEST took 731ns
+INSPECT took 2.00396138s
+GetRepositoryTags() took 1.533595461s
 {
     "Name": "405074236871.dkr.ecr.eu-west-1.amazonaws.com/stavros-test/sensor-data-scala",
     "Digest": "sha256:3e42ffae0ba8f334e40b9754758668bdd0ed08a1ed63b7e831998b65b701599a",
@@ -205,7 +221,12 @@ GCloud inspect took 4.6376393s
         "FLINK_TGZ_URL=https://mirrors.ocf.berkeley.edu/apache/flink/flink-1.9.1/flink-1.9.1-bin-scala_2.12.tgz"
     ]
 }
-AWS inspect took 4.682178789s
+unmarshal took 351.843µs
+AWS inspect took 4.846994291s
+newSystemContext() took 1.53µs
+parseImageSource() took 8.600924413s
+MANIFEST took 2.130575ms
+INSPECT took 452.912µs
 {
     "Name": "docker.io/lightbend/spark-aggregation",
     "Digest": "sha256:d97920e8e8678854cbbbf27c9330b48f0b290156e69003bd734de6f93899c567",
@@ -252,8 +273,9 @@ AWS inspect took 4.682178789s
         "SPARK_VERSION=2.4.4"
     ]
 }
-local daemon took 9.085247607s
---- PASS: Test_inspect (34.19s)
+unmarshal took 71.598µs
+local daemon took 8.716397066s
+--- PASS: Test_inspect (28.26s)
 PASS
 
 ```

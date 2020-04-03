@@ -88,31 +88,31 @@ func (opts *InspectOptions) Run(args []string, stdout io.Writer) (retErr error) 
 	}
 	imageName := args[0]
 
-	//if err := reexecIfNecessaryForImages(imageName); err != nil {
-	//	return err
-	//}
+	start := time.Now()
 
 	sys, err := opts.Image.newSystemContext()
 	if err != nil {
 		return err
 	}
-
+	fmt.Printf("newSystemContext() took %s\n",time.Since(start))
+	start = time.Now()
 	src, err := parseImageSource(ctx, opts.Image, imageName)
 	if err != nil {
 		return fmt.Errorf("Error parsing image name %q: %v", imageName, err)
 	}
-
+	fmt.Printf("parseImageSource() took %s\n",time.Since(start))
 	defer func() {
 		if err := src.Close(); err != nil {
 			retErr = errors.Wrapf(retErr, fmt.Sprintf("(could not close image: %v) ", err))
 		}
 	}()
 
+	start = time.Now()
 	rawManifest, _, err := src.GetManifest(ctx, nil)
 	if err != nil {
 		return fmt.Errorf("Error retrieving manifest for image: %v", err)
 	}
-
+	fmt.Printf("MANIFEST took %s\n",time.Since(start))
 	if opts.raw && !opts.config {
 		_, err := stdout.Write(rawManifest)
 		if err != nil {
@@ -148,7 +148,9 @@ func (opts *InspectOptions) Run(args []string, stdout io.Writer) (retErr error) 
 		return nil
 	}
 
+	start = time.Now()
 	imgInspect, err := img.Inspect(ctx)
+	fmt.Printf("INSPECT took %s\n",time.Since(start))
 	if err != nil {
 		return err
 	}
@@ -177,7 +179,9 @@ func (opts *InspectOptions) Run(args []string, stdout io.Writer) (retErr error) 
 		if err != nil {
 			return err
 		}
+		start = time.Now()
 		outputData.RepoTags, err = docker.GetRepositoryTags(ctx, sys, img.Reference())
+		fmt.Printf("GetRepositoryTags() took %s\n",time.Since(start))
 		if err != nil {
 			// some registries may decide to block the "list all tags" endpoint
 			// gracefully allow the inspect to continue in this case. Currently
@@ -190,11 +194,13 @@ func (opts *InspectOptions) Run(args []string, stdout io.Writer) (retErr error) 
 			logrus.Warnf("Registry disallows tag list retrieval; skipping")
 		}
 	}
+	start = time.Now()
 	out, err := json.MarshalIndent(outputData, "", "    ")
 	if err != nil {
 		return err
 	}
 	fmt.Fprintf(stdout, "%s\n", string(out))
+	fmt.Printf("unmarshal took %s\n",time.Since(start))
 	return nil
 }
 
